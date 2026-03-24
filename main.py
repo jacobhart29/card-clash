@@ -92,7 +92,7 @@ def handle_round():
                 option = input("Would you like to hit or stand? ")
                 option.lower()
                 if option == "hit":
-                    deal_card(players_hand)
+                    deal_card(deck)
             else:
                 _players_turn = False
                 handle_win("Player")
