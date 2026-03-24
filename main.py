@@ -15,7 +15,7 @@ dealers_turn = False
 
 # OTHER CONFIGS
 
-DEBUG = True
+DEBUG = False
 
 # VARIABLES
 
@@ -75,7 +75,21 @@ def calculate_hand_score(hand):
 
 # JUST HERE TO BE HERE
 def play_game():
-    handle_round()
+    global deck, player_turn, dealers_turn, players_hand, dealers_hand
+    while True:
+        handle_round()
+        compare_scores()
+        again = input("Play another round? (y/n): ").strip().lower()
+        if again != "y":
+            print("END")
+            break
+        players_hand.clear()
+        dealers_hand.clear()
+        player_turn = True
+        dealers_turn = False
+        if len(deck) < 10:
+            deck = create_deck()
+            deck = shuffle_deck(deck)
     return None
 
 # WHERE THE GAME ACC GOES
@@ -127,8 +141,28 @@ def handle_round():
                 _dealers_turn = False
                 dealers_turn = False
 
+# JUST TO BE CLEAN IG
 def handle_win(player):
     print(player + " has won the round.")
 
+# WIN CONDITIONS
+def compare_scores():
+    p_score = calculate_hand_score(players_hand)
+    d_score = calculate_hand_score(dealers_hand)
+    print(f"Final Scores -> Player: {p_score} | Dealer: {d_score}")
+
+    if p_score > 21:
+        handle_win("Dealer")
+    elif d_score > 21:
+        handle_win("Player")
+    else:
+        if p_score > d_score:
+            handle_win("Player")
+        elif d_score > p_score:
+            handle_win("Dealer")
+        else:
+            print("Push (tie).")
+
 if __name__ == "__main__":
     play_game()
+
