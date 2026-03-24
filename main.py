@@ -13,6 +13,9 @@ values = {"2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, "9": 9, "10": 
 player_turn = True
 dealers_turn = False
 
+# OTHER CONFIGS
+
+DEBUG = False
 # HANDS
 
 dealers_hand = []
@@ -23,13 +26,13 @@ players_hand = []
 # CREATE DECK
 def create_deck():
     deck = [(rank, suit) for suit in suits for rank in ranks]
-    print("Deck Created with 52 Cards.")
+    DEBUG and print("Deck Created with 52 Cards.")
     return deck
 
 # SHUFFLE DECK
 def shuffle_deck(deck):
     random.shuffle(deck)
-    print("Deck Shuffled.")
+    DEBUG and print("Deck Shuffled.")
     return deck
     
 deck = create_deck()
@@ -43,12 +46,12 @@ def deal_card(deck):
     print(f"Dealt card: {card[0]} of {card[1]}")
     if player_turn:
         players_hand.append(card)
-        print(f"Player's Hand: {players_hand}")
-        print(f"Player's Hand Value: {calculate_hand_score(players_hand)}")
+        DEBUG and print(f"Player's Hand: {players_hand}")
+        DEBUG and print(f"Player's Hand Value: {calculate_hand_score(players_hand)}")
     else:
         dealers_hand.append(card)
-        print(f"Dealer's Hand: {dealers_hand}")
-        print(f"Dealer's Hand Value: {calculate_hand_score(dealers_hand)}")
+        DEBUG and print(f"Dealer's Hand: {dealers_hand}")
+        DEBUG and print(f"Dealer's Hand Value: {calculate_hand_score(dealers_hand)}")
 
 def calculate_hand_score(hand):
     value = 0
