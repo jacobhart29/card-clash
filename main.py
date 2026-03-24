@@ -15,7 +15,7 @@ dealers_turn = False
 
 # OTHER CONFIGS
 
-DEBUG = False
+DEBUG = True
 
 # VARIABLES
 
@@ -46,17 +46,18 @@ deck = shuffle_deck(deck)
 # GAME PLAY
 
 # DEAL CARDS
-def deal_card(deck):
+def deal_card(deck, hand):
     card = deck.pop()
     DEBUG and print(f"Dealt card: {card[0]} of {card[1]}")
-    if player_turn:
+    if hand == "player":
         players_hand.append(card)
         DEBUG and print(f"Player's Hand: {players_hand}")
         DEBUG and print(f"Player's Hand Value: {calculate_hand_score(players_hand)}")
-    else:
+    elif hand == "dealer":
         dealers_hand.append(card)
         DEBUG and print(f"Dealer's Hand: {dealers_hand}")
         DEBUG and print(f"Dealer's Hand Value: {calculate_hand_score(dealers_hand)}")
+    else: DEBUG and print("Failed to give card to:" + hand)
 
 # CALC SCORE (CALC IS SLANG FOR CALCULATE or whatever)
 def calculate_hand_score(hand):
@@ -79,23 +80,52 @@ def play_game():
 
 # WHERE THE GAME ACC GOES
 def handle_round():
+    global player_turn, dealers_turn, rounds
+    rounds += 1
     _players_turn = False
     _dealers_turn = False
+    deal_card(deck, "player")
+    deal_card(deck, "player")
+    deal_card(deck, "dealer")
+    deal_card(deck, "dealer")
 
     if player_turn:
         _players_turn = True
-        deal_card(deck)
-        deal_card(deck)
         while _players_turn:
-            if 21 > calculate_hand_score(players_hand):
-                print(f"Current Hand: {', '.join(f'{rank} of {suit}' for rank, suit in players_hand)} - Total: " + str(calculate_hand_score(players_hand))) # idk what this print statement is tbh it just works ig
+            if 21 >= calculate_hand_score(players_hand):
+                print(f"Current Hand: {', '.join(f'{rank} of {suit}' for rank, suit in players_hand)} - Total: " + str(calculate_hand_score(players_hand)))
+                d_rank, d_suit = dealers_hand[0]
+                print(f"The Dealers First Card is {d_rank} of {d_suit}.")
                 option = input("Would you like to hit or stand? ")
-                option.lower()
-                if option == "hit":
-                    deal_card(deck)
+                newOPTION = option.lower()
+                if newOPTION == "hit":
+                    deal_card(deck, "player")
+                elif newOPTION == "stand":
+                    _players_turn = False
+                    player_turn = False
+                    _dealers_turn = True
+                    dealers_turn = True
+                    
+                else:
+                    print("Like ACC pick Hit or Stand")
             else:
                 _players_turn = False
-                handle_win("Player")
+                player_turn = False
+                _dealers_turn = True
+                dealers_turn = True
+                print("You Busted - Total: " + str(calculate_hand_score(players_hand)))
+    
+    if dealers_turn:
+        while _dealers_turn:
+            if 17 >= calculate_hand_score(dealers_hand):
+                deal_card(deck, "dealer")
+                DEBUG and print("DEALER HIT")
+            else: 
+                DEBUG and print("DEALER STAND AT " + str(calculate_hand_score(dealers_hand)))
+                _players_turn = False
+                player_turn = False
+                _dealers_turn = False
+                dealers_turn = False
 
 def handle_win(player):
     print(player + " has won the round.")
