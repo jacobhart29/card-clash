@@ -79,10 +79,6 @@ def play_game():
     while True:
         handle_round()
         compare_scores()
-        again = input("Play another round? (y/n): ").strip().lower()
-        if again != "y":
-            print("END")
-            break
         players_hand.clear()
         dealers_hand.clear()
         player_turn = True
@@ -149,7 +145,7 @@ def handle_win(player):
 def compare_scores():
     p_score = calculate_hand_score(players_hand)
     d_score = calculate_hand_score(dealers_hand)
-    print(f"Final Scores -> Player: {p_score} | Dealer: {d_score}")
+    print(f"Final Scores - Player: {p_score} | Dealer: {d_score}")
 
     if p_score > 21:
         handle_win("Dealer")
