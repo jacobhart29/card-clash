@@ -85,17 +85,19 @@ def play_game():
         dealers_hand.clear()
         player_turn = True
         dealers_turn = False
-        if len(deck) < 10:
+        if len(deck) < 20:
+            DEBUG and print("Deck is low on cards. Reshuffling...")
             deck = create_deck()
             deck = shuffle_deck(deck)
     return None
 
 # WHERE THE GAME ACC GOES (It uses the gloabal variables to keep track)
 def handle_round():
-    global player_turn, dealers_turn, rounds
+    global player_turn, dealers_turn, rounds, deck
     rounds += 1
     _players_turn = False
     _dealers_turn = False
+    deck = shuffle_deck(deck)
     deal_card(deck, "player")
     deal_card(deck, "player")
     deal_card(deck, "dealer")
