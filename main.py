@@ -19,7 +19,7 @@ DEBUG = False
 
 # VARIABLES
 
-rounds = 0
+rounds = 1
 
 # HANDS
 
@@ -79,6 +79,8 @@ def play_game():
     while True:
         handle_round()
         compare_scores()
+        print("*" * 61)
+        print("Round: " + str(rounds))
         players_hand.clear()
         dealers_hand.clear()
         player_turn = True
@@ -147,6 +149,7 @@ def compare_scores():
     d_score = calculate_hand_score(dealers_hand)
     print(f"Final Scores - Player: {p_score} | Dealer: {d_score}")
 
+    # if both players bust dealer wins by default because the player lose check is first
     if p_score > 21:
         handle_win("Dealer")
     elif d_score > 21:
@@ -160,4 +163,6 @@ def compare_scores():
             print("Push (tie).")
 
 if __name__ == "__main__":
+    print("Round: " + str(rounds))
     play_game()
+    
